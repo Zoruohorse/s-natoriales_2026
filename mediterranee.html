@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord — Sénatoriales 2026 — Méditerranée</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --accent-soft: #dbeafe;
+      --violet: #7c3aed;
+      --violet-soft: #ede9fe;
+      --green: #15803d;
+      --green-soft: #dcfce7;
+      --amber: #b45309;
+      --amber-soft: #fef3c7;
+      --slate: #475569;
+      --slate-soft: #e2e8f0;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --radius: 16px;
+      --shadow: 0 10px 24px rgba(15, 23, 42, .06);
+      --shadow-hover: 0 18px 34px rgba(15, 23, 42, .12);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); background: var(--bg); line-height: 1.45; }
+    button, input { font: inherit; }
+    .page { max-width: 1500px; margin: 0 auto; padding: 30px; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding: 28px 30px; border-radius: 22px; color: #fff; background: linear-gradient(118deg, #0f172a 0%, #0e7490 54%, #b45309 100%); box-shadow: var(--shadow); }
+    .eyebrow { display: inline-flex; gap: 8px; align-items: center; margin: 0 0 10px; font-size: .75rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: #bfdbfe; }
+    .topbar h1 { font-size: clamp(1.75rem, 3vw, 2.55rem); line-height: 1.08; letter-spacing: -.04em; margin: 0 0 10px; }
+    .topbar p { max-width: 850px; margin: 0; color: #dbeafe; font-size: 1rem; }
+    .scope-badge { flex: 0 0 auto; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 14px 16px; background: rgba(255,255,255,.10); text-align: right; min-width: 176px; }
+    .scope-badge strong { display: block; font-size: 1.4rem; }
+    .scope-badge span { color: #dbeafe; font-size: .82rem; }
+    .tabs { display: flex; gap: 8px; margin: 24px 0 20px; padding: 6px; width: fit-content; background: #e8eef7; border: 1px solid #d8e0ec; border-radius: 14px; }
+    .tab-btn { border: 0; cursor: pointer; padding: 10px 14px; border-radius: 10px; font-weight: 750; color: var(--muted); background: transparent; transition: .2s ease; }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,.72); }
+    .tab-btn.active { color: #fff; background: var(--accent); box-shadow: 0 3px 8px rgba(37,99,235,.25); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 18px; }
+    .stat-card { position: relative; overflow: hidden; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .stat-card:after { content: ''; position: absolute; right: -18px; bottom: -32px; width: 100px; height: 100px; border-radius: 50%; background: var(--accent-soft); opacity: .72; }
+    .stat-card:nth-child(2):after { background: var(--green-soft); }
+    .stat-card:nth-child(3):after { background: var(--violet-soft); }
+    .stat-card:nth-child(4):after { background: var(--amber-soft); }
+    .stat-label { position: relative; z-index: 1; color: var(--muted); font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .stat-value { position: relative; z-index: 1; margin-top: 6px; font-size: 2rem; font-weight: 850; letter-spacing: -.04em; }
+    .stat-note { position: relative; z-index: 1; margin-top: 4px; color: var(--muted); font-size: .84rem; }
+    .section-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+    .panel { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: var(--surface); box-shadow: var(--shadow); }
+    .panel h2 { margin: 0 0 4px; font-size: 1.1rem; letter-spacing: -.02em; }
+    .panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+    .panel-subtitle { margin: 0; color: var(--muted); font-size: .9rem; }
+    .department-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .department-card { appearance: none; display: block; width: 100%; text-align: left; cursor: pointer; border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface-soft); transition: .18s ease; }
+    .department-card:hover { border-color: #93c5fd; background: #eff6ff; transform: translateY(-1px); }
+    .department-card.active { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: #eff6ff; }
+    .department-card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .department-name { font-weight: 800; } .department-total { color: var(--accent); font-size: 1.15rem; font-weight: 850; }
+    .track { height: 7px; margin: 11px 0 9px; overflow: hidden; border-radius: 8px; background: #dbe4f0; }
+    .fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #38bdf8); }
+    .department-detail { color: var(--muted); font-size: .78rem; }
+    .bar-row { display: grid; grid-template-columns: 128px 1fr 36px; gap: 10px; align-items: center; margin: 10px 0; }
+    .bar-label { font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-value { color: var(--muted); text-align: right; font-size: .83rem; font-weight: 750; }
+    .empty-state { padding: 36px 20px; border: 1px dashed #cbd5e1; border-radius: 14px; color: var(--muted); text-align: center; background: rgba(255,255,255,.7); }
+    .dashboard-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .filters { position: sticky; top: 16px; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .filter-section { padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .filter-section:last-of-type { margin-bottom: 10px; }
+    .filter-label { display: block; margin: 0 0 9px; color: var(--muted); font-size: .74rem; font-weight: 850; letter-spacing: .07em; text-transform: uppercase; }
+    .search-input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none; background: #fff; color: var(--text); }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .filter-options { display: flex; flex-direction: column; gap: 7px; max-height: 242px; overflow: auto; padding-right: 3px; }
+    .filter-btn { display: flex; justify-content: space-between; gap: 8px; align-items: center; width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 8px 9px; background: var(--surface-soft); color: var(--text); text-align: left; cursor: pointer; font-size: .84rem; transition: .18s ease; }
+    .filter-btn:hover { border-color: #93c5fd; } .filter-btn.active { color: #fff; border-color: var(--accent); background: var(--accent); }
+    .filter-count { min-width: 20px; padding: 1px 6px; border-radius: 9px; background: rgba(15,23,42,.06); color: inherit; font-size: .75rem; text-align: center; }
+    .filter-btn.active .filter-count { background: rgba(255,255,255,.2); }
+    .reset-btn { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px; color: var(--slate); background: #fff; font-weight: 750; cursor: pointer; transition: .18s ease; }
+    .reset-btn:hover { color: var(--accent); border-color: var(--accent); background: #eff6ff; }
+    .cartography-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .results-count { color: var(--muted); font-size: .9rem; }
+    .active-filter { display: none; padding: 6px 10px; color: var(--accent-dark); background: var(--accent-soft); border-radius: 999px; font-size: .78rem; font-weight: 800; }
+    .active-filter.visible { display: inline-flex; }
+    .candidate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(282px, 1fr)); gap: 15px; }
+    .candidate-card { position: relative; overflow: hidden; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); cursor: pointer; transition: .2s ease; }
+    .candidate-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #bfdbfe; }
+    .candidate-card:before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--accent); }
+    .candidate-card.sortant-represente:before { background: var(--green); }
+    .candidate-card.sortant-retrait:before { background: var(--amber); }
+    .candidate-card.nouveau-candidat:before { background: var(--violet); }
+    .candidate-card.dissident:before { background: var(--danger); }
+    .candidate-card-main { padding-left: 5px; }
+    .candidate-topline { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+    .candidate-name { margin: 0; font-size: 1.12rem; line-height: 1.15; letter-spacing: -.02em; }
+    .department-tag { flex: 0 0 auto; padding: 4px 7px; border-radius: 7px; background: #eef2ff; color: #3730a3; font-size: .7rem; font-weight: 850; }
+    .party-line { color: var(--muted); font-size: .86rem; font-weight: 700; }
+    .dynamics { display: -webkit-box; overflow: hidden; margin: 14px 0 15px; color: #334155; font-size: .9rem; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 7px; padding-left: 5px; }
+    .badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; font-size: .7rem; font-weight: 850; letter-spacing: .025em; }
+    .badge.nouveau-candidat { color: #5b21b6; background: var(--violet-soft); } .badge.sortant-represente { color: var(--green); background: var(--green-soft); } .badge.sortant-retrait { color: var(--amber); background: var(--amber-soft); } .badge.dissident { color: #991b1b; background: var(--danger-soft); }
+    .badge.investi { color: #166534; background: #dcfce7; } .badge.isole { color: #475569; background: #e2e8f0; } .badge.en-attente { color: #92400e; background: #fef3c7; }
+    .badge.certainty { color: #1e3a8a; background: #dbeafe; }
+    .detail-link { align-self: flex-end; padding-left: 5px; color: var(--accent); font-size: .83rem; font-weight: 800; }
+    .dynamics-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+    .dynamics-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: var(--surface); box-shadow: var(--shadow); }
+    .dynamics-card h2 { margin: 0 0 6px; font-size: 1.1rem; } .dynamics-card p { margin: 0; color: #334155; font-size: .93rem; }
+    .dynamics-stat { display: inline-flex; margin-bottom: 11px; padding: 4px 8px; color: var(--accent-dark); background: var(--accent-soft); border-radius: 999px; font-size: .72rem; font-weight: 850; }
+    .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+    .list-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: var(--surface); box-shadow: var(--shadow); }
+    .list-card h2 { margin: 0 0 12px; font-size: 1.05rem; } .list-card ul { margin: 0; padding-left: 20px; } .list-card li { margin: 9px 0; color: #334155; font-size: .9rem; }
+    .modal { display: none; position: fixed; z-index: 100; inset: 0; padding: 20px; background: rgba(15,23,42,.62); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+    .modal.active { display: flex; } .modal-content { width: min(760px,100%); max-height: min(800px, calc(100vh - 40px)); overflow: auto; padding: 28px; border-radius: 20px; background: #fff; box-shadow: 0 28px 70px rgba(15,23,42,.35); position: relative; }
+    .modal-close { position: absolute; right: 17px; top: 14px; width: 36px; height: 36px; border: 0; border-radius: 50%; cursor: pointer; background: #f1f5f9; color: var(--slate); font-size: 1.45rem; line-height: 1; }
+    .modal-close:hover { color: var(--danger); background: var(--danger-soft); } .modal-title { padding-right: 40px; margin: 0; font-size: 1.7rem; letter-spacing: -.04em; }
+    .modal-subtitle { margin: 5px 0 22px; color: var(--muted); } .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .modal-field { padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); }
+    .modal-field.wide { grid-column: 1 / -1; } .modal-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: .72rem; letter-spacing: .065em; font-weight: 850; text-transform: uppercase; }
+    .modal-field p { margin: 0; color: #1e293b; font-size: .94rem; } .evidence { border-left: 4px solid var(--accent); background: #eff6ff; }
+    @media (max-width: 1050px) { .summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .dashboard-layout { grid-template-columns: 1fr; } .filters { position: static; } .filter-options { max-height: 180px; } .section-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) { .page { padding: 16px; } .topbar { flex-direction: column; padding: 24px; } .scope-badge { text-align: left; } .tabs { width: 100%; overflow: auto; } .tab-btn { white-space: nowrap; } .summary-grid, .department-grid, .dynamics-grid, .method-grid, .modal-grid { grid-template-columns: 1fr; } .modal-field.wide { grid-column: auto; } .bar-row { grid-template-columns: 100px 1fr 26px; } }
+  </style>
+  <meta name="description" content="Tableau de bord interactif des candidatures sénatoriales 2026 en Nouvelle-Aquitaine et Occitanie.">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Base électorale • mise à jour du corpus transmis</p>
+        <h1>Élections sénatoriales 2026<br>Méditerranée</h1>
+        <p>Tableau de bord interactif des candidatures et signaux de recomposition politique identifiés en Nouvelle-Aquitaine et Occitanie.</p>
+      </div>
+      <div class="scope-badge"><strong id="scope-total">16 profils</strong><span id="scope-note">1 région · 5 départements suivis</span></div>
+    </header>
+
+    <nav class="tabs" aria-label="Navigation du tableau de bord">
+      <button class="tab-btn active" onclick="switchTab('overview', this)">Tableau de bord</button>
+      <button class="tab-btn" onclick="switchTab('cartography', this)">Cartographie des candidatures</button>
+      <button class="tab-btn" onclick="switchTab('analysis', this)">Dynamiques & méthode</button>
+    </nav>
+
+    <section id="tab-overview" class="tab-panel active">
+      <div id="summary-grid" class="summary-grid"></div>
+      <div class="section-grid">
+        <article class="panel">
+          <div class="panel-head"><div><h2>Répartition territoriale</h2><p class="panel-subtitle">Cliquez sur un département pour l’ouvrir dans la cartographie. Les cartes comportent leur région d’appartenance.</p></div></div>
+          <div id="department-grid" class="department-grid"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><div><h2>Étiquettes politiques</h2><p class="panel-subtitle">Répartition des profils renseignés dans le corpus.</p></div></div>
+          <div id="party-bars"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="tab-cartography" class="tab-panel">
+      <div class="dashboard-layout">
+        <aside class="filters" aria-label="Filtres">
+          <div class="filter-section">
+            <label class="filter-label" for="search">Recherche</label>
+            <input id="search" class="search-input" type="search" placeholder="Nom, parti, région, département…" oninput="setSearch(this.value)">
+          </div>
+          <div class="filter-section"><span class="filter-label">Région</span><div class="filter-options" id="region-filters"></div></div>
+          <div class="filter-section"><span class="filter-label">Département</span><div class="filter-options" id="department-filters"></div></div>
+          <div class="filter-section"><span class="filter-label">Formation politique</span><div class="filter-options" id="party-filters"></div></div>
+          <div class="filter-section"><span class="filter-label">Type de candidature</span><div class="filter-options" id="category-filters"></div></div>
+          <div class="filter-section"><span class="filter-label">Statut dans le corpus</span><div class="filter-options" id="status-filters"></div></div>
+          <button class="reset-btn" onclick="resetFilters()">Réinitialiser les filtres</button>
+        </aside>
+        <main>
+          <div class="cartography-head"><div><h2 style="margin:0; font-size:1.25rem;">Profils identifiés</h2><p class="results-count" id="results-count"></p></div><span class="active-filter" id="active-filter"></span></div>
+          <div id="candidate-grid" class="candidate-grid"></div>
+        </main>
+      </div>
+    </section>
+
+    <section id="tab-analysis" class="tab-panel">
+      <div id="dynamics-grid" class="dynamics-grid"></div>
+      <div class="method-grid">
+        <article class="list-card"><h2>Points de vigilance</h2><ul id="vigilance-list"></ul></article>
+        <article class="list-card"><h2>Traçabilité de la base</h2><ul id="source-list"></ul></article>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal" id="candidate-modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" aria-label="Fermer" onclick="toggleModal(false)">×</button>
+      <h2 id="modal-name" class="modal-title"></h2>
+      <p id="modal-subtitle" class="modal-subtitle"></p>
+      <div class="modal-grid">
+        <div class="modal-field"><span class="modal-label">Région</span><p id="modal-region"></p></div>
+        <div class="modal-field"><span class="modal-label">Département</span><p id="modal-department"></p></div>
+        <div class="modal-field"><span class="modal-label">Formation politique</span><p id="modal-party"></p></div>
+        <div class="modal-field"><span class="modal-label">Type de candidature</span><p id="modal-category"></p></div>
+        <div class="modal-field"><span class="modal-label">Statut dans le corpus</span><p id="modal-status"></p></div>
+        <div class="modal-field wide"><span class="modal-label">Concurrent(s) / configurations mentionnées</span><p id="modal-competitors"></p></div>
+        <div class="modal-field wide"><span class="modal-label">Dynamique politique identifiée</span><p id="modal-dynamics"></p></div>
+        <div class="modal-field wide evidence"><span class="modal-label">Élément probant du corpus</span><p id="modal-evidence"></p></div>
+        <div class="modal-field"><span class="modal-label">Niveau de certitude</span><p id="modal-certainty"></p></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const electionData = {
+  "candidates": [
+    {
+      "name": "Alexandra Borchio Fontimp",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Alpes-Maritimes",
+      "party": "LR",
+      "category": "sortant-represente",
+      "status": "isole",
+      "competitors": "Dominique Estrosi-Sassone, Laurent Castillo",
+      "dynamics": "Lance sa propre liste pour incarner la droite conservatrice départementale.",
+      "evidence": "conduira sa propre liste aux élections sénatoriales[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Dominique Estrosi-Sassone",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Alpes-Maritimes",
+      "party": "LR",
+      "category": "sortant-represente",
+      "status": "isole",
+      "competitors": "Alexandra Borchio Fontimp, Laurent Castillo",
+      "dynamics": "Rejet de la porosité avec l'extrême droite locale, refuse de s'associer avec les Ciottistes.",
+      "evidence": "J’y vais pour être réélue avec mon travail[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Laurent Castillo",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Alpes-Maritimes",
+      "party": "UDR",
+      "category": "nouveau-candidat",
+      "status": "en-attente",
+      "competitors": "Dominique Estrosi-Sassone",
+      "dynamics": "Missionné par E. Ciotti pour capter les grands électeurs de la Métropole de Nice.",
+      "evidence": "Laurent Castillo qui serait pressenti pour conduire la liste commune UDR/RN[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Fabrice Durnerin",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Alpes-de-Haute-Provence",
+      "party": "UDR",
+      "category": "nouveau-candidat",
+      "status": "investi",
+      "competitors": "",
+      "dynamics": "Liste commune Ciotti-RN dans le Sud.",
+      "evidence": "être investi par les deux partis pour succéder au sortant[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Brigitte Devesa",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "UDI",
+      "category": "nouveau-candidat",
+      "status": "investi",
+      "competitors": "Valérie Boyer, Marie-Pierre Callet",
+      "dynamics": "En pôle position pour sceller l'union du centre voulue par Renaud Muselier.",
+      "evidence": "pourrait prendre la tête de la liste d’union de la droite et du centre[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Guy Benarroche",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "Les Écologistes",
+      "category": "sortant-represente",
+      "status": "investi",
+      "competitors": "Marie-Pierre Callet, Renaud Muselier",
+      "dynamics": "Consolide le bloc de gauche avec la dynamique des municipales.",
+      "evidence": "le sortant Guy Benarroche sera à nouveau candidat[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Marie-Pierre Callet",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "RN",
+      "category": "nouveau-candidat",
+      "status": "investi",
+      "competitors": "Stéphane Ravier, Renaud Muselier",
+      "dynamics": "Vice-présidente ex-LR recrutée par le RN pour rassurer les élus ruraux.",
+      "evidence": "Membre du RN depuis seulement quelques semaines... sera tête de liste RN[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Renaud Muselier",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "Renaissance / Cap sur l'Avenir",
+      "category": "nouveau-candidat",
+      "status": "investi",
+      "competitors": "Sabrina Agresti-Roubache",
+      "dynamics": "Quitte la présidence de Région pour briguer le Sénat à la tête d'une liste d'union de la droite et du centre.",
+      "evidence": "J'ai un message pour vous... je serai candidat aux élections sénatoriales dans les Bouches-du-Rhône.",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Sabrina Agresti-Roubache",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "Renaissance",
+      "category": "nouveau-candidat",
+      "status": "en-attente",
+      "competitors": "Renaud Muselier",
+      "dynamics": "Envisage une liste distincte de celle de la présidence de Région pour s'imposer en dehors des équilibres locaux.",
+      "evidence": "La réflexion de la ministre semble toutefois bien avancée... faire du Sénat un outil de résistance politique.",
+      "certainty": "Moyenne"
+    },
+    {
+      "name": "Stéphane Ravier",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "Sans étiquette",
+      "category": "sortant-represente",
+      "status": "isole",
+      "competitors": "Marie-Pierre Callet",
+      "dynamics": "Lâché par le RN, condamné par la justice, il tente de sauver son siège en indépendant.",
+      "evidence": "Il se présentera aux élections sénatoriales... sans affiliation[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Valérie Boyer",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Bouches-du-Rhône",
+      "party": "LR",
+      "category": "nouveau-candidat",
+      "status": "isole",
+      "competitors": "Brigitte Devesa",
+      "dynamics": "Menacée de relégation en 3e position sur la liste Muselier.",
+      "evidence": "partie aussi en campagne, pourrait, elle, se retrouver à une troisième place[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Frank Giletti",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Var",
+      "party": "RN",
+      "category": "nouveau-candidat",
+      "status": "investi",
+      "competitors": "Marc Lauriol",
+      "dynamics": "Député RN visant les deux sièges d'un Var de plus en plus bleu marine.",
+      "evidence": "liste du Rassemblement national menée par le député Frank Giletti[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Françoise Dumont",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Var",
+      "party": "LR",
+      "category": "nouveau-candidat",
+      "status": "investi",
+      "competitors": "Marc Lauriol",
+      "dynamics": "Tente de préserver le rempart LR face aux ambitions de l'extrême droite.",
+      "evidence": "celle des Républicains incarnée par Françoise Dumont[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Marc Lauriol",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Var",
+      "party": "Sans étiquette",
+      "category": "dissident",
+      "status": "isole",
+      "competitors": "Frank Giletti, Françoise Dumont",
+      "dynamics": "Meneur d'une troisième voie pour éviter le duel LR/RN.",
+      "evidence": "Une liste... indépendante de toute étiquette politique.[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Jean-Baptiste Blanc",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Vaucluse",
+      "party": "LR",
+      "category": "sortant-represente",
+      "status": "investi",
+      "competitors": "",
+      "dynamics": "Face à une poussée frontiste indéniable.",
+      "evidence": "Après Jean-Baptiste Blanc (LR)...[cite: 1]",
+      "certainty": "Haute"
+    },
+    {
+      "name": "Lucien Stanzione",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "department": "Vaucluse",
+      "party": "PS",
+      "category": "sortant-represente",
+      "status": "investi",
+      "competitors": "",
+      "dynamics": "Candidature compliquée par les pertes municipales à Avignon et Carpentras.",
+      "evidence": "candidat à un second mandat au Palais du Luxembourg[cite: 1]",
+      "certainty": "Haute"
+    }
+  ]
+};
+
+    const labels = {
+      categories: {
+        all: "Tous les profils",
+        "nouveau-candidat": "Nouveau candidat",
+        "sortant-represente": "Sortant représenté",
+        "sortant-retrait": "Sortant en retrait",
+        dissident: "Dissident"
+      },
+      statuses: { all: "Tous les statuts", investi: "Investi", isole: "Isolé", "en-attente": "En attente" }
+    };
+    const regionOrder = ["Provence-Alpes-Côte d'Azur"];
+    const departmentOrder = ["Alpes-Maritimes", "Alpes-de-Haute-Provence", "Bouches-du-Rhône", "Var", "Vaucluse"];
+    let state = { region: "all", department: "all", party: "all", category: "all", status: "all", query: "" };
+
+    const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[character]));
+    const countBy = (items, field) => items.reduce((acc, item) => { acc[item[field]] = (acc[item[field]] || 0) + 1; return acc; }, {});
+    const getFilteredCandidates = () => electionData.candidates.filter(c => {
+      const searchable = [c.name, c.region, c.department, c.party, c.competitors, c.dynamics, labels.categories[c.category], labels.statuses[c.status]].join(" ").toLocaleLowerCase("fr");
+      return (state.region === "all" || c.region === state.region)
+        && (state.department === "all" || c.department === state.department)
+        && (state.party === "all" || c.party === state.party)
+        && (state.category === "all" || c.category === state.category)
+        && (state.status === "all" || c.status === state.status)
+        && (!state.query || searchable.includes(state.query));
+    });
+
+    function switchTab(tab, button) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      button.classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    function renderOverview() {
+      const all = electionData.candidates;
+      const invested = all.filter(c => c.status === 'investi').length;
+      const incumbents = all.filter(c => c.category === 'sortant-represente').length;
+      const newcomers = all.filter(c => c.category === 'nouveau-candidat').length;
+      const regions = new Set(all.map(c => c.region)).size;
+      const departments = new Set(all.map(c => c.department)).size;
+      document.getElementById('scope-total').textContent = `${all.length} profils`;
+      document.getElementById('scope-note').textContent = `${regions} régions · ${departments} départements suivis`;
+      document.getElementById('summary-grid').innerHTML = [
+        {label:'Profils identifiés', value:all.length, note:'Candidatures et positions présentes dans le corpus'},
+        {label:'Profils investis', value:invested, note:'Statut « investi » dans la base transmise'},
+        {label:'Sortants représentés', value:incumbents, note:'Continuité de mandat explicitement renseignée'},
+        {label:'Nouveaux candidats', value:newcomers, note:'Profils classés « nouveau-candidat »'}
+      ].map(card => `<article class="stat-card"><div class="stat-label">${card.label}</div><div class="stat-value">${card.value}</div><div class="stat-note">${card.note}</div></article>`).join('');
+
+      const byDepartment = countBy(all, 'department');
+      const maxDepartment = Math.max(...Object.values(byDepartment));
+      const departmentGrid = document.getElementById('department-grid');
+      departmentGrid.innerHTML = departmentOrder.filter(dept => byDepartment[dept]).map(dept => {
+        const local = all.filter(c => c.department === dept);
+        const byStatus = countBy(local, 'status');
+        const active = state.department === dept ? 'active' : '';
+        return `<button class="department-card ${active}" onclick="filterDepartmentFromOverview(decodeURIComponent('${encodeURIComponent(dept)}'))"><div class="department-card-top"><span class="department-name">${escapeHTML(dept)}</span><span class="department-total">${local.length}</span></div><div class="track"><div class="fill" style="width:${Math.round(local.length/maxDepartment*100)}%"></div></div><div class="department-detail">${escapeHTML(local[0].region)} · ${byStatus.investi || 0} investi(s) · ${byStatus.isole || 0} isolé(s)</div></button>`;
+      }).join('');
+
+      const parties = Object.entries(countBy(all, 'party')).sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0], 'fr'));
+      const maxParty = Math.max(...parties.map(([,value]) => value));
+      document.getElementById('party-bars').innerHTML = parties.map(([party, value]) => `<div class="bar-row"><span class="bar-label" title="${escapeHTML(party)}">${escapeHTML(party)}</span><div class="track" style="margin:0"><div class="fill" style="width:${Math.round(value/maxParty*100)}%"></div></div><span class="bar-value">${value}</span></div>`).join('');
+    }
+
+    function renderFilters() {
+      const candidates = electionData.candidates;
+      const regions = regionOrder.filter(r => candidates.some(c => c.region === r));
+      const departments = departmentOrder.filter(d => candidates.some(c => c.department === d));
+      const parties = [...new Set(candidates.map(c => c.party))].sort((a,b) => a.localeCompare(b,'fr'));
+      renderFilterGroup('region-filters', [{ key:'all', label:'Toutes les régions' }, ...regions.map(r => ({ key:r, label:r }))], 'region', 'setRegion');
+      renderFilterGroup('department-filters', [{ key:'all', label:'Tous les départements' }, ...departments.map(d => ({ key:d, label:d }))], 'department', 'setDepartment');
+      renderFilterGroup('party-filters', [{ key:'all', label:'Toutes les formations' }, ...parties.map(p => ({ key:p, label:p }))], 'party', 'setParty');
+      renderFilterGroup('category-filters', Object.entries(labels.categories).map(([key,label]) => ({ key, label })), 'category', 'setCategory');
+      renderFilterGroup('status-filters', Object.entries(labels.statuses).map(([key,label]) => ({ key, label })), 'status', 'setStatus');
+    }
+
+    function renderFilterGroup(containerId, options, stateKey, handler) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = options.map(option => {
+        const total = option.key === 'all' ? electionData.candidates.length : electionData.candidates.filter(candidate => candidate[stateKey] === option.key).length;
+        const active = state[stateKey] === option.key ? 'active' : '';
+        const safeKey = encodeURIComponent(option.key);
+        return `<button class="filter-btn ${active}" onclick="${handler}(decodeURIComponent('${safeKey}'))"><span>${escapeHTML(option.label)}</span><span class="filter-count">${total}</span></button>`;
+      }).join('');
+    }
+
+    function renderCartography() {
+      const results = getFilteredCandidates();
+      const grid = document.getElementById('candidate-grid');
+      const activeFilters = [];
+      if (state.region !== 'all') activeFilters.push(state.region);
+      if (state.department !== 'all') activeFilters.push(state.department);
+      if (state.party !== 'all') activeFilters.push(state.party);
+      if (state.category !== 'all') activeFilters.push(labels.categories[state.category]);
+      if (state.status !== 'all') activeFilters.push(labels.statuses[state.status]);
+      if (state.query) activeFilters.push(`Recherche : « ${state.query} »`);
+      document.getElementById('results-count').textContent = `${results.length} profil${results.length > 1 ? 's' : ''} affiché${results.length > 1 ? 's' : ''} sur ${electionData.candidates.length}`;
+      const badge = document.getElementById('active-filter');
+      badge.textContent = activeFilters.length ? activeFilters.join(' · ') : '';
+      badge.classList.toggle('visible', activeFilters.length > 0);
+      if (!results.length) { grid.innerHTML = `<div class="empty-state">Aucun profil ne correspond à ce croisement de filtres.</div>`; return; }
+      grid.innerHTML = results.map(candidate => `<article class="candidate-card ${candidate.category}" tabindex="0" role="button" onclick="openCandidate('${encodeURIComponent(candidate.name)}')" onkeydown="if(event.key==='Enter'||event.key===' ') openCandidate('${encodeURIComponent(candidate.name)}')"><div class="candidate-card-main"><div class="candidate-topline"><div><h3 class="candidate-name">${escapeHTML(candidate.name)}</h3><div class="party-line">${escapeHTML(candidate.party)} · ${escapeHTML(candidate.region)}</div></div><span class="department-tag">${escapeHTML(candidate.department)}</span></div><p class="dynamics">${escapeHTML(candidate.dynamics)}</p><span class="detail-link">Ouvrir la fiche →</span></div><div class="card-meta"><span class="badge ${candidate.category}">${labels.categories[candidate.category]}</span><span class="badge ${candidate.status}">${labels.statuses[candidate.status]}</span><span class="badge certainty">Certitude : ${escapeHTML(candidate.certainty)}</span></div></article>`).join('');
+    }
+
+    function renderAnalysis() {
+      const dynamics = [
+        { region:"Provence-Alpes-Côte d'Azur", headline:"Alpes-Maritimes : trois offres concurrentes à droite", text:"Le corpus fait apparaître deux sortantes LR sur des listes distinctes, Alexandra Borchio Fontimp et Dominique Estrosi-Sassone, tandis que Laurent Castillo est mentionné comme pressenti pour une configuration commune UDR/RN." },
+        { region:"Provence-Alpes-Côte d'Azur", headline:"Bouches-du-Rhône : multiplication des listes et tensions au centre droit", text:"Avec sept profils renseignés, les Bouches-du-Rhône constituent le principal foyer de compétition. Le corpus met en regard le projet d’union de Renaud Muselier, l’option distincte envisagée par Sabrina Agresti-Roubache, la concurrence LR, l’offre RN et la présence du sortant écologiste Guy Benarroche." },
+        { region:"Provence-Alpes-Côte d'Azur", headline:"Var et Vaucluse : droite, RN et maintien des sortants", text:"Dans le Var, Frank Giletti, Françoise Dumont et Marc Lauriol structurent une concurrence à trois. Dans le Vaucluse, le corpus relève deux sortants représentés, Jean-Baptiste Blanc et Lucien Stanzione." }
+      ];
+      document.getElementById('dynamics-grid').innerHTML = dynamics.map(item => {
+        const total = electionData.candidates.filter(c => c.region === item.region).length;
+        const deptTotal = new Set(electionData.candidates.filter(c => c.region === item.region).map(c => c.department)).size;
+        return `<article class="dynamics-card"><span class="dynamics-stat">${item.region} · ${total} profil${total > 1 ? 's' : ''} · ${deptTotal} département${deptTotal > 1 ? 's' : ''}</span><h2>${item.headline}</h2><p>${item.text}</p></article>`;
+      }).join('');
+      const vigilance = [
+        '<strong>Éclatement des configurations :</strong> le corpus signale plusieurs listes concurrentes ou possibles dans les Alpes-Maritimes et les Bouches-du-Rhône ; la hiérarchie finale des listes demeure susceptible d’évoluer.',
+        '<strong>Statuts :</strong> « investi », « isolé » et « en attente » reprennent strictement les classifications transmises ; ils ne préjugent ni d’un dépôt officiel ni de l’issue du scrutin.',
+        '<strong>Lecture des rapports de force :</strong> les concurrents et dynamiques sont des signaux textuels du corpus, et non une modélisation du collège électoral sénatorial.',
+        '<strong>Traçabilité :</strong> toute publication externe doit remplacer les marqueurs <code>[cite: 1]</code> par les références documentaires complètes et vérifiables.'
+      ];
+      const sources = [
+        '<strong>Source de données :</strong> données électorales Méditerranée transmises par l’utilisateur ; classifications d’origine conservées.',
+        '<strong>Normalisation :</strong> les libellés « 13 - Bouches-du-Rhône » et « Bouches-du-Rhône » ont été réunis sous un seul département afin d’éviter un doublon de filtre.',
+        '<strong>Périmètre :</strong> Provence-Alpes-Côte d’Azur ; cinq départements effectivement renseignés dans le corpus.',
+        '<strong>Règle d’usage :</strong> les champs « evidence » sont affichés sans réécriture et les marqueurs internes de citation restent ceux du corpus fourni.'
+      ];
+      document.getElementById('vigilance-list').innerHTML = vigilance.map(item => `<li>${item}</li>`).join('');
+      document.getElementById('source-list').innerHTML = sources.map(item => `<li>${item}</li>`).join('');
+    }
+
+    function openCandidate(encodedName) {
+      const name = decodeURIComponent(encodedName);
+      const c = electionData.candidates.find(candidate => candidate.name === name);
+      if (!c) return;
+      document.getElementById('modal-name').textContent = c.name;
+      document.getElementById('modal-subtitle').textContent = `${c.party} · Profil renseigné dans le corpus électoral`;
+      document.getElementById('modal-region').textContent = c.region;
+      document.getElementById('modal-department').textContent = c.department;
+      document.getElementById('modal-party').textContent = c.party;
+      document.getElementById('modal-category').textContent = labels.categories[c.category];
+      document.getElementById('modal-status').textContent = labels.statuses[c.status];
+      document.getElementById('modal-competitors').textContent = c.competitors || 'Aucun concurrent explicitement renseigné dans le corpus.';
+      document.getElementById('modal-dynamics').textContent = c.dynamics;
+      document.getElementById('modal-evidence').textContent = c.evidence || 'Aucun élément probant isolé dans le corpus.';
+      document.getElementById('modal-certainty').textContent = c.certainty;
+      toggleModal(true);
+    }
+
+    function toggleModal(show) { document.getElementById('candidate-modal').classList.toggle('active', show); }
+    function closeModal(event) { if (event.target.id === 'candidate-modal') toggleModal(false); }
+    function setSearch(value) { state.query = value.trim().toLocaleLowerCase('fr'); refresh(); }
+    function setRegion(value) { state.region = value; state.department = 'all'; refresh(); }
+    function setDepartment(value) { state.department = value; if (value !== 'all') { const candidate = electionData.candidates.find(c => c.department === value); if (candidate) state.region = candidate.region; } refresh(); }
+    function setParty(value) { state.party = value; refresh(); }
+    function setCategory(value) { state.category = value; refresh(); }
+    function setStatus(value) { state.status = value; refresh(); }
+    function resetFilters() { state = { region:'all', department:'all', party:'all', category:'all', status:'all', query:'' }; document.getElementById('search').value = ''; refresh(); }
+    function filterDepartmentFromOverview(department) { state.department = department; const candidate = electionData.candidates.find(c => c.department === department); state.region = candidate ? candidate.region : 'all'; refresh(); const cartographyButton = document.querySelectorAll('.tab-btn')[1]; switchTab('cartography', cartographyButton); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function refresh() { renderOverview(); renderFilters(); renderCartography(); }
+
+    document.addEventListener('DOMContentLoaded', () => { renderOverview(); renderFilters(); renderCartography(); renderAnalysis(); document.addEventListener('keydown', event => { if (event.key === 'Escape') toggleModal(false); }); });
+  </script>
+</body>
+</html>
