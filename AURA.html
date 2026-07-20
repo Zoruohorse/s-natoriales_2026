@@ -429,7 +429,95 @@
       "dynamics": "Doit gérer les équilibres à gauche avec le PS et LFI.",
       "evidence": "Le sortant des Ecologistes, Thomas Dossus, sera à nouveau candidat[cite: 1]",
       "certainty": "Haute"
-    }
+    }, 
+    { 
+            name: "Sylvie Goy-Chavent", 
+            department: "Ain",
+            party: "LR",
+            category: "sortant-represente", 
+            status: "investi", 
+            competitors: "Olga Givernet, Florence Blatrix-Contat, Véronique Baude", 
+            dynamics: "Sénatrice sortante briguant un 4e mandat en misant sur l'ancrage rural.", 
+            evidence: "Je vais dans toutes les communes, je contacte tous les élus, je vais les voir un par un", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Florence Blatrix-Contat", 
+            department: "Ain",
+            party: "PS",
+            category: "sortant-represente", 
+            status: "investi", 
+            competitors: "Sylvie Goy-Chavent, Olga Givernet", 
+            dynamics: "Seule sénatrice de gauche sortante, cherchant à rassembler largement.", 
+            evidence: "La seule sénatrice de gauche dans l'Ain a rassemblé très largement pour retrouver l'hémicycle", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Olga Givernet", 
+            department: "Ain",
+            party: "Renaissance",
+            category: "nouveau-candidat", 
+            status: "investi", 
+            competitors: "Sylvie Goy-Chavent, Florence Blatrix-Contat", 
+            dynamics: "Députée et ancienne ministre lançant une liste axée sur la simplification et les communes.", 
+            evidence: "Olga Givernet, députée de l’Ain et ancienne ministre déléguée chargée de l’Énergie, annonce sa candidature", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Laurent Primault", 
+            department: "Rhône",
+            party: "RN",
+            category: "nouveau-candidat", 
+            status: "investi", 
+            competitors: "Christophe Guilloteau, Thomas Dossus", 
+            dynamics: "Tête de liste du RN visant à créer un groupe au Sénat en ciblant le monde rural.", 
+            evidence: "Laurent Primault, conseiller municipal RN à Chassieu... est le candidat désigné", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Anthony Penhouët", 
+            department: "Haute-Savoie",
+            party: "Place Publique",
+            category: "nouveau-candidat", 
+            status: "investi", 
+            competitors: "Fabienne Grebert, Sylviane Noël", 
+            dynamics: "Conduit une liste de gauche hors Écologistes pour faire entendre une voix alternative.", 
+            evidence: "la liste “Haute-Savoie solidaire”, menée par les élus locaux Anthony Penhouët et Sarah Klilib, s’est officiellement lancée", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Sarah Klilib", 
+            department: "Haute-Savoie",
+            party: "PS",
+            category: "nouveau-candidat", 
+            status: "investi", 
+            competitors: "Fabienne Grebert", 
+            dynamics: "Colistière socialiste constatant l'échec des négociations d'union avec les Verts.", 
+            evidence: "On leur a fait une place mais ils ont refusé", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Gilbert-Luc Devinaz", 
+            department: "Rhône",
+            party: "ex-PS",
+            category: "sortant-retrait", 
+            status: "isole", 
+            competitors: "Hélène Geoffroy", 
+            dynamics: "Sénateur sortant démissionnant du PS pour dénoncer le manque de démocratie interne.", 
+            evidence: "Gilbert-Luc Devinaz annonce sa démission du Parti Socialiste à l’approche des élections sénatoriales", 
+            certainty: "Haute" 
+        },
+        { 
+            name: "Hélène Geoffroy", 
+            department: "Rhône",
+            party: "PS",
+            category: "nouveau-candidat", 
+            status: "en-attente", 
+            competitors: "Gilbert-Luc Devinaz", 
+            dynamics: "Pressentie en 2e position sur la liste d'union de gauche, au cœur des tensions internes au PS.", 
+            evidence: "La liste plurielle de la gauche [...] sera vraisemblablement conduite par le sénateur écologiste Thomas Dossus et secondée par [...] Hélène Geoffroy", 
+            certainty: "Moyenne" 
+        }
   ]
 };
 
@@ -532,12 +620,11 @@
 
     function renderAnalysis() {
       const dynamics = [
-        { department:'Ain', headline:'Pluralité des offres et renouvellement à droite', text:'Le corpus recense quatre profils. Il décrit une recomposition à droite autour de Véronique Baude, tandis que LFI et Reconquête! se positionnent également dans le département.' },
-        { department:'Ardèche', headline:'Continuité incarnée par les sortants LR', text:'Anne Ventalon et Mathieu Darnaud sont tous deux classés comme sortants représentés. Aucun concurrent n’est renseigné dans la base à ce stade.' },
-        { department:'Drôme', headline:'Département le plus dense de la base', text:'Six profils, répartis entre LR, Renaissance, PS et Place Publique. Le corpus signale à la fois des retraits de sortants et des compétitions de succession.' },
-        { department:'Haute-Savoie', headline:'Duel territorial et candidature commune', text:'Le corpus fait apparaître une candidature commune de Cyril Pellevat et Sylviane Noël, face notamment à Fabienne Grebert, autour d’un clivage territorial, climatique et social.' },
-        { department:'Rhône', headline:'Succession ouverte et arbitrages de coalition', text:'Cinq profils sont recensés. Les retraits d’Étienne Blanc et Raymonde Poncet-Monge coexistent avec plusieurs candidatures LR et le retour de Thomas Dossus.' }
-      ];
+       { department: 'Ain', headline: 'Densification de l’offre électorale', text: 'L’entrée en lice de l’ancienne ministre Olga Givernet et la confirmation des sortantes Sylvie Goy-Chavent et Florence Blatrix-Contat transforment la dynamique électorale en une compétition de premier plan.' },
+       { department:'Ardèche', headline:'Continuité incarnée par les sortants LR', text:'Anne Ventalon et Mathieu Darnaud sont tous deux classés comme sortants représentés. Aucun concurrent n’est renseigné dans la base à ce stade.' },
+       { department:'Drôme', headline:'Département le plus dense de la base', text:'Six profils, répartis entre LR, Renaissance, PS et Place Publique. Le corpus signale à la fois des retraits de sortants et des compétitions de succession.' },
+       { department: 'Haute-Savoie', headline: 'Division actée à gauche', text: 'L’émergence de la liste « Haute-Savoie solidaire » scelle la division avec Les Écologistes, redéfinissant les rapports de force face aux listes de droite.' },
+       { department: 'Rhône', headline: 'Crise socialiste et ambitions du RN', text: 'La désignation d’Hélène Geoffroy provoque la démission fracassante du sortant Gilbert-Luc Devinaz. Parallèlement, le RN installe Laurent Primault pour cibler l’électorat rural.' }
       document.getElementById('dynamics-grid').innerHTML = dynamics.map(item => {
         const total = electionData.candidates.filter(c => c.department === item.department).length;
         return `<article class="dynamics-card"><span class="dynamics-stat">${item.department} · ${total} profil${total > 1 ? 's' : ''}</span><h2>${item.headline}</h2><p>${item.text}</p></article>`;
@@ -546,7 +633,9 @@
         '<strong>Exhaustivité :</strong> le tableau ne recense que les profils présents dans le corpus transmis ; il ne permet pas de conclure à l’absence d’autres candidatures.',
         '<strong>Nature du statut :</strong> « investi » et « isolé » décrivent la classification fournie ; ils ne préjugent ni du dépôt officiel, ni du résultat électoral.',
         '<strong>Lecture des rapports de force :</strong> les concurrents et dynamiques sont des signaux textuels, et non une modélisation du collège électoral sénatorial.',
-        '<strong>Évolutivité :</strong> les alliances, têtes de listes et retraits peuvent évoluer rapidement ; une date et une source explicite devront accompagner toute mise à jour.'
+        '<strong>Évolutivité :</strong> les alliances, têtes de listes et retraits peuvent évoluer rapidement ; une date et une source explicite devront accompagner toute mise à jour.',
+        '<strong>Confirmation des investitures (Rhône) :</strong> Le ticket Dossus/Geoffroy est fortement anticipé mais les soubresauts internes (démission Devinaz, colère des Jeunes PS) exigent un suivi strict des dépôts officiels.'
+      
       ];
       const sources = [
         '<strong>Source de données :</strong> objet <code>deltaElectionData</code> transmis par l’utilisateur, classifications d’origine conservées.',
