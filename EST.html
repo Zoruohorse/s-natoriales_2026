@@ -273,7 +273,68 @@
       "dynamics": "Prise de guerre issue de la droite locale (ex-LR) pour mener la liste d'extrême droite.",
       "evidence": "Ancienne vice-présidente de la LR Martine Vassal au département, sera tête de liste RN.",
       "certainty": "Haute"
-    }
+    }, 
+    candidates: [
+        {
+            name: "François Rebsamen",
+            region: "Bourgogne-Franche-Comté",
+            department: "Côte-d’Or",
+            party: "Parti Socialiste / Divers gauche",
+            category: "nouveau-candidat",
+            status: "isole",
+            competitors: "",
+            dynamics: "Ancien ministre se présentant comme un homme libre, cherchant à transcender les clivages partisans avec de multiples soutiens pour lier urbain et rural[cite: 2].",
+            evidence: "Il insiste sur sa volonté de se présenter en « homme libre », ne sollicitant aucune investiture mais comptant sur le soutien de ceux « que j’ai su réunir »[cite: 2].",
+            certainty: "Haute"
+        },
+        {
+            name: "Géraldine Grangier",
+            region: "Bourgogne-Franche-Comté",
+            department: "Doubs",
+            party: "Rassemblement National",
+            category: "nouveau-candidat",
+            status: "investi",
+            competitors: "",
+            dynamics: "Députée et conseillère régionale misant sur son ancrage local pour pallier la sous-représentation de son parti au Sénat[cite: 2].",
+            evidence: "J’ai accepté la confiance accordée par le Rassemblement National en me désignant candidate aux élections sénatoriales dans le Doubs[cite: 2].",
+            certainty: "Haute"
+        },
+        {
+            name: "Pierre François",
+            region: "Grand Est",
+            department: "Vosges",
+            party: "Rassemblement National",
+            category: "nouveau-candidat",
+            status: "investi",
+            competitors: "",
+            dynamics: "Candidature soutenue par les cadres locaux cherchant à convertir le vote des élus locaux en misant sur la dynamique nationale[cite: 2].",
+            evidence: "Une candidature soutenue par les cadres du Rassemblement National et notamment par les deux députés RN des Vosges[cite: 2].",
+            certainty: "Haute"
+        },
+        {
+            name: "Cédric Perrin",
+            region: "Bourgogne-Franche-Comté",
+            department: "Territoire de Belfort",
+            party: "Non précisé",
+            category: "sortant-represente",
+            status: "isole",
+            competitors: "",
+            dynamics: "Sénateur sortant affichant un fort ancrage local avec le soutien écrasant des maires du département[cite: 2].",
+            evidence: "Cédric Perrin, sénateur sortant du Territoire de Belfort, candidat en 2026, avec sa suppléante, Valérie Oriat[cite: 2].",
+            certainty: "Haute"
+        },
+        {
+            name: "Nicolas Villenet",
+            region: "Grand Est",
+            department: "Ardennes",
+            party: "Non précisé",
+            category: "nouveau-candidat",
+            status: "isole",
+            competitors: "",
+            dynamics: "Médecin et suppléant de député qui axe sa campagne sur l'écoute des élus locaux et la défense de la ruralité[cite: 2].",
+            evidence: "Nicolas Villenet annonce ce vendredi 3 juillet 2026 à L’Ardennais, sa candidature dans les Ardennes pour les élections sénatoriales[cite: 2].",
+            certainty: "Haute"
+        }
   ]
 };
 
@@ -389,7 +450,9 @@
       const dynamics = [
         { region:"Bourgogne-Franche-Comté", headline:"Haute-Saône : guerre d’investiture à droite", text:"Le corpus place Frédéric Burghard en attente d’investiture face à Dimitri Doussot. Cette concurrence interne LR a provoqué le report de la décision de la CNI, créant un risque de division avant même la campagne." },
         { region:"Grand Est", headline:"Alsace : recomposition entre ancrage de gauche et retrait centriste", text:"Anne-Pernelle Richardot cherche à préserver un siège de gauche dans le Bas-Rhin via une ouverture transpartisane. Dans le Haut-Rhin, le retrait de Patricia Schillinger libère un espace dont le corpus anticipe qu’il sera disputé par le centre et la droite." },
-        { region:"Grand Est", headline:"Aube : stratégie RN tournée vers les élus ruraux", text:"Adrien Thiebaut est classé investi pour le Rassemblement National. Le signal identifié est une stratégie de captation du vote protestataire parmi les maires et élus ruraux, face aux formations centristes." }
+        { region:"Grand Est", headline:"Aube : stratégie RN tournée vers les élus ruraux", text:"Adrien Thiebaut est classé investi pour le Rassemblement National. Le signal identifié est une stratégie de captation du vote protestataire parmi les maires et élus ruraux, face aux formations centristes." }, 
+        { region: "Bourgogne-Franche-Comté", headline: "Côte-d'Or : Rebsamen en rassembleur affranchi", text: "François Rebsamen se lance hors des cadres d'investiture stricts (« homme libre ») tout en s'assurant le soutien d'un spectre politique allant de la gauche écologiste au centre (Modem), modifiant les équilibres traditionnels[cite: 2]." },
+        { region: "Bourgogne-Franche-Comté / Grand Est", headline: "Déploiement stratégique du Rassemblement National", text: "Le RN structure son implantation avec les candidatures officielles de Géraldine Grangier (Doubs) et Pierre François (Vosges), visant explicitement à constituer un groupe parlementaire plus imposant au Sénat en surfant sur la dynamique de l'Assemblée[cite: 2]." }
       ];
       document.getElementById('dynamics-grid').innerHTML = dynamics.map(item => {
         const total = electionData.candidates.filter(c => c.region === item.region).length;
@@ -401,7 +464,9 @@
         '<strong>Haut-Rhin :</strong> le retrait de Patricia Schillinger est confirmé dans le corpus, mais les candidatures susceptibles d’occuper l’espace libéré ne sont pas détaillées individuellement dans les données fournies.',
         '<strong>CNI Les Républicains :</strong> la vigilance transmise vise les décisions reportées pour la Haute-Saône, les Bouches-du-Rhône et les Alpes-Maritimes. Seule la Haute-Saône relève du périmètre Est ; les autres cas sont conservés comme signal national.',
         '<strong>Profil hors périmètre :</strong> Marie-Pierre Callet est conservée telle que transmise, mais rattachée aux Bouches-du-Rhône et explicitement distinguée du périmètre Est pour éviter toute lecture territoriale erronée.',
-        '<strong>Lecture des rapports de force :</strong> les concurrents et dynamiques sont des signaux qualitatifs extraits du corpus ; ils ne constituent ni une projection de voix ni une modélisation du collège électoral sénatorial.'
+        '<strong>Lecture des rapports de force :</strong> les concurrents et dynamiques sont des signaux qualitatifs extraits du corpus ; ils ne constituent ni une projection de voix ni une modélisation du collège électoral sénatorial.', 
+        "<strong>Absence d'étiquettes partisanes (Belfort / Ardennes) :</strong> Le corpus ne mentionne pas explicitement les partis de rattachement de Cédric Perrin (sortant) et Nicolas Villenet ; ils sont classés en statut « isolé » dans l'attente d'une précision sur d'éventuelles investitures officielles[cite: 2].",
+        "<strong>Statut de François Rebsamen :</strong> Bien qu'il a repris sa carte au PS, sa déclaration de candidature sans étiquette imposée force à le classer en dehors du schéma d'investiture classique[cite: 2]."
       ];
       const sources = [
         '<strong>Source de données :</strong> éléments électoraux « Est » transmis par l’utilisateur ; classifications d’origine conservées.',
