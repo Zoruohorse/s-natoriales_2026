@@ -107,7 +107,7 @@
     .card-meta { display: flex; flex-wrap: wrap; gap: 7px; padding-left: 5px; }
     .badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; font-size: .7rem; font-weight: 850; letter-spacing: .025em; }
     .badge.nouveau-candidat { color: #5b21b6; background: var(--violet-soft); } .badge.sortant-represente { color: var(--green); background: var(--green-soft); } .badge.sortant-retrait { color: var(--amber); background: var(--amber-soft); }
-    .badge.investi { color: #166534; background: #dcfce7; } .badge.isole { color: #475569; background: #e2e8f0; }
+    .badge.investi { color: #166534; background: #dcfce7; } .badge.isole { color: #475569; background: #e2e8f0; } .badge.en-attente { color: #92400e; background: #fef3c7; }
     .badge.certainty { color: #1e3a8a; background: #dbeafe; }
     .detail-link { align-self: flex-end; padding-left: 5px; color: var(--accent); font-size: .83rem; font-weight: 800; }
     .dynamics-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
@@ -528,7 +528,7 @@
         "sortant-represente": "Sortant représenté",
         "sortant-retrait": "Sortant en retrait"
       },
-      statuses: { all: "Tous les statuts", investi: "Investi", isole: "Isolé" }
+        statuses: { all: "Tous les statuts", investi: "Investi", isole: "Isolé","en-attente": "En attente"}
     };
     const departmentOrder = ["Ain", "Ardèche", "Drôme", "Haute-Savoie", "Rhône"];
     let state = { department: "all", party: "all", category: "all", status: "all", query: "" };
