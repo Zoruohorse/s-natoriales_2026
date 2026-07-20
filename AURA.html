@@ -625,6 +625,7 @@
        { department:'Drôme', headline:'Département le plus dense de la base', text:'Six profils, répartis entre LR, Renaissance, PS et Place Publique. Le corpus signale à la fois des retraits de sortants et des compétitions de succession.' },
        { department: 'Haute-Savoie', headline: 'Division actée à gauche', text: 'L’émergence de la liste « Haute-Savoie solidaire » scelle la division avec Les Écologistes, redéfinissant les rapports de force face aux listes de droite.' },
        { department: 'Rhône', headline: 'Crise socialiste et ambitions du RN', text: 'La désignation d’Hélène Geoffroy provoque la démission fracassante du sortant Gilbert-Luc Devinaz. Parallèlement, le RN installe Laurent Primault pour cibler l’électorat rural.' }
+         ];
       document.getElementById('dynamics-grid').innerHTML = dynamics.map(item => {
         const total = electionData.candidates.filter(c => c.department === item.department).length;
         return `<article class="dynamics-card"><span class="dynamics-stat">${item.department} · ${total} profil${total > 1 ? 's' : ''}</span><h2>${item.headline}</h2><p>${item.text}</p></article>`;
