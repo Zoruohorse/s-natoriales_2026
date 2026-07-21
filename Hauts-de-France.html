@@ -398,7 +398,7 @@
         { region:"Hauts-de-France", headline:"Aisne : incertitude RN et candidature rurale autonome", text:"Le corpus fait apparaître deux nouveaux candidats : Franck Briffaut, classé « en attente » d’un éventuel appel du RN, et Paul Mougenot, porté par une candidature sans appareil centrée sur la ruralité. Le retrait de Thomas Hennequin laisse une configuration locale en recomposition." },
         { region:"Hauts-de-France", headline:"Somme : continuité socialiste autour de Rémi Cardon", text:"Rémi Cardon est le seul profil renseigné dans la Somme à ce stade. Classé comme sortant représenté et investi, il s’appuie dans le corpus sur le maintien d’Amiens à gauche." },
         { region:"Hauts-de-France", headline:"Somme : Multiplication des candidatures", text: "Le sortant Rémi Cardon (PS) voit émerger une concurrence à sa gauche avec Pascal Aubrée (PCF) sur le créneau rural, et la constitution de la liste de Laurent Somon." },
-        { region:"Hauts-de-France", headline "Aisne : Verrouillage par les sortants", text: "Les trois sénateurs sortants de l'Aisne annoncent leur candidature commune, complexifiant la tâche des nouveaux prétendants comme Franck Briffaut (RN) ou Paul Mougenot." }
+        { region:"Hauts-de-France", headline: "Aisne : Verrouillage par les sortants", text: "Les trois sénateurs sortants de l'Aisne annoncent leur candidature commune, complexifiant la tâche des nouveaux prétendants comme Franck Briffaut (RN) ou Paul Mougenot." }
       ];
       document.getElementById('dynamics-grid').innerHTML = dynamics.map(item => {
         const total = electionData.candidates.filter(c => c.region === item.region).length;
@@ -406,12 +406,12 @@
         return `<article class="dynamics-card"><span class="dynamics-stat">${item.region} · ${total} profil${total > 1 ? 's' : ''} · ${deptTotal} département${deptTotal > 1 ? 's' : ''}</span><h2>${item.headline}</h2><p>${item.text}</p></article>`;
       }).join('');
       const vigilance = [
-        '<strong>Aisne :</strong> Franck Briffaut est classé « en attente ». Ce statut traduit une possibilité de candidature mentionnée dans le corpus et non une investiture confirmée.',
-        '<strong>Couverture territoriale partielle :</strong> le dashboard porte sur les Hauts-de-France, mais seules l’Aisne et la Somme sont documentées dans les données fournies. Aucun profil n’est ajouté pour le Nord, l’Oise ou le Pas-de-Calais.',
-        '<strong>Lecture des rapports de force :</strong> les concurrents et dynamiques correspondent à des signaux qualitatifs du corpus ; ils ne constituent ni une projection de voix ni une modélisation du collège électoral sénatorial.',
-        '<strong>Traçabilité :</strong> avant diffusion externe, les marqueurs <code>[cite: 1]</code> doivent être remplacés par les références documentaires complètes et vérifiables.',
-        '<strong>Identité des sortants de l'Aisne :</strong> Le corpus mentionne que les « trois sénateurs de l'Aisne » se représentent, mais le texte tronqué ne donne pas leurs noms ; ils ne sont donc pas créés informatiquement pour éviter toute invention[cite: 3].',
-        '<strong>Étiquette de Laurent Somon :</strong> Le texte ne précise pas son rattachement politique ; il est donc enregistré sans étiquette partisane explicite pour l'instant[cite: 3].'
+      <strong>Aisne :</strong> Franck Briffaut est classé « en attente ». Ce statut traduit une possibilité de candidature mentionnée dans le corpus et non une investiture confirmée.',
+  '<strong>Couverture territoriale partielle :</strong> le dashboard porte sur les Hauts-de-France, mais seules l’Aisne et la Somme sont documentées dans les données fournies. Aucun profil n’est ajouté pour le Nord, l’Oise ou le Pas-de-Calais.',
+  '<strong>Lecture des rapports de force :</strong> les concurrents et dynamiques correspondent à des signaux qualitatifs du corpus ; ils ne constituent ni une projection de voix ni une modélisation du collège électoral sénatorial.',
+  '<strong>Traçabilité :</strong> avant diffusion externe, les marqueurs <code>[cite: 1]</code> doivent être remplacés par les références documentaires complètes et vérifiables.',
+  `<strong>Identité des sortants de l'Aisne :</strong> le corpus mentionne que les « trois sénateurs de l'Aisne » se représentent, mais le texte tronqué ne donne pas leurs noms ; ils ne sont donc pas créés informatiquement pour éviter toute invention[cite: 3].`,
+  `<strong>Étiquette de Laurent Somon :</strong> le texte ne précise pas son rattachement politique ; il est donc enregistré sans étiquette partisane explicite pour l'instant[cite: 3].`
       ];
       const sources = [
         '<strong>Source de données :</strong> données électorales Hauts-de-France transmises par l’utilisateur ; classifications d’origine conservées.',
