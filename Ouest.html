@@ -407,14 +407,14 @@
     },
     { 
             "name": "Philippe Paul", 
-            department": "Finistère",
-            party": "LR",
-            category": "sortant-represente", 
-            status": "investi", 
-            competitors": "Patrick Leclerc, Forough Dadkhah", 
-            dynamics": "Le sénateur sortant voit sa base menacée par la liste divers droite de Patrick Leclerc.", 
-            evidence": "sénateur sortant Philippe Paul conduira une liste LR", 
-            certainty": "Haute" 
+            "department": "Finistère",
+            "party": "LR",
+            "category": "sortant-represente", 
+            "status": "investi", 
+            "competitors": "Patrick Leclerc, Forough Dadkhah", 
+            "dynamics": "Le sénateur sortant voit sa base menacée par la liste divers droite de Patrick Leclerc.", 
+            "evidence": "sénateur sortant Philippe Paul conduira une liste LR", 
+            "certainty": "Haute" 
         },
         { 
             "name": "Thierry Cozic", 
@@ -604,8 +604,8 @@
       },
       statuses: { all: "Tous les statuts", investi: "Investi", isole: "Isolé" }
     };
-    const regionOrder = ["Bretagne", "Centre-Val de Loire", "Pays de la Loire"];
-    const departmentOrder = ["Côtes-d'Armor", "Finistère", "Ille-et-Vilaine", "Cher", "Eure-et-Loir", "Indre", "Sarthe", "Vendée"];
+    const regionOrder = ["Bretagne", "Centre-Val de Loire", "Pays de la Loire", "Nouvelle-Aquitaine"];
+    const departmentOrder = ["Côtes-d'Armor", "Finistère", "Ille-et-Vilaine", "Cher", "Eure-et-Loir", "Indre", "Sarthe", "Vendée", "Charente", "Charente-Maritime"];
     let state = { region: "all", department: "all", party: "all", category: "all", status: "all", query: "" };
 
     const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[character]));
