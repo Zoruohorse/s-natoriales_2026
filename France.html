@@ -65,14 +65,14 @@
       <div class="scope-badge"><strong id="scope-total"></strong><span id="scope-note"></span></div>
     </header>
 
-    <nav class="tabs" aria-label="Navigation de la méta-analyse">
-      <button class="tab-btn active" onclick="switchTab('overview', this)">Synthèse nationale</button>
-      <button class="tab-btn" onclick="switchTab('hotspots', this)">Foyers de recomposition</button>
-      <button class="tab-btn" onclick="switchTab('cartography', this)">Base consolidée</button>
-      <button class="tab-btn" onclick="switchTab('method', this)">Méthode & vigilances</button>
-    </nav>
+   <nav class="tabs" aria-label="Navigation de la méta-analyse">
+  <button class="tab-btn active" onclick="switchTab('cartography', this)">Base consolidée</button>
+  <button class="tab-btn" onclick="switchTab('overview', this)">Synthèse nationale</button>
+  <button class="tab-btn" onclick="switchTab('hotspots', this)">Foyers de recomposition</button>
+  <button class="tab-btn" onclick="switchTab('method', this)">Méthode & vigilances</button>
+</nav>
 
-    <section id="tab-overview" class="tab-panel active">
+    <section id="tab-overview" class="tab-panel">
       <div class="coverage-banner"><div>⚠️</div><div><strong>Corpus national consolidé, mais couverture territoriale partielle</strong><p id="coverage-banner-text">La base couvre des profils renseignés dans 12 régions et 53 départements. Elle n'est ni exhaustive par région ni représentative de l'ensemble des candidatures françaises ; les pourcentages décrivent uniquement ce corpus.</p></div></div>
       <div id="summary-grid" class="summary-grid"></div>
       <div class="section-grid">
@@ -88,7 +88,7 @@
       <div class="method-grid"><article class="list-card"><h2>Investitures à suivre</h2><ul id="pending-list"></ul></article><article class="list-card"><h2>Dissidences recensées</h2><ul id="dissident-list"></ul></article></div>
     </section>
 
-    <section id="tab-cartography" class="tab-panel">
+    <section id="tab-cartography" class="tab-panel active"
       <div class="dashboard-layout">
         <aside class="filters" aria-label="Filtres de la base nationale">
           <div class="filter-section"><label class="filter-label" for="search">Recherche</label><input id="search" class="search-input" type="search" placeholder="Nom, parti, région, département…" oninput="setSearch(this.value)"></div>
