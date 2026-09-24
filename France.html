@@ -52,6 +52,16 @@
     .footer-note{margin:18px 2px 0;color:var(--muted);font-size:.82rem}
     @media(max-width:1150px){.summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hotspot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-layout{grid-template-columns:1fr}.filters{position:static}.filter-options{max-height:180px}.section-grid{grid-template-columns:1fr}}
     @media(max-width:720px){.page{padding:16px}.topbar{flex-direction:column;padding:24px}.scope-badge{text-align:left}.tabs{width:100%;overflow:auto}.tab-btn{white-space:nowrap}.summary-grid,.region-grid,.insights-grid,.hotspot-grid,.method-grid,.modal-grid{grid-template-columns:1fr}.modal-field.wide{grid-column:auto}.bar-row{grid-template-columns:122px 1fr 34px}}
+    @media (min-width: 721px) and (max-width: 1150px) {
+  .dashboard-layout {
+    grid-template-columns: 300px minmax(0, 1fr);
+  }
+
+  .filters {
+    position: sticky;
+    top: 16px;
+  }
+}
   </style>
 </head>
 <body>
