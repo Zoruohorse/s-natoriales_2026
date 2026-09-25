@@ -16,6 +16,11 @@
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.48; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     button, input { font: inherit; }
+    .evidence-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .evidence-item { font-size: 0.9rem; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 8px; border-left: 3px solid var(--accent); }
+    .evidence-quote { color: #1e293b; font-style: italic; }
+    .evidence-link { display: inline-block; margin-top: 6px; color: var(--accent-dark); text-decoration: none; font-size: 0.8rem; font-weight: 700; }
+    .evidence-link:hover { text-decoration: underline; }
     .page { max-width: 1560px; margin: 0 auto; padding: 30px; }
     .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 26px; padding: 30px; border-radius: 24px; color: #fff; background: linear-gradient(118deg,#0f172a 0%,#1e3a8a 56%,#0f766e 100%); box-shadow: var(--shadow); }
     .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 11px; color:#bfdbfe; font-size:.75rem; font-weight:850; letter-spacing:.11em; text-transform:uppercase; }
@@ -52,15 +57,8 @@
     .footer-note{margin:18px 2px 0;color:var(--muted);font-size:.82rem}
     @media(max-width:1150px){.summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hotspot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-layout{grid-template-columns:1fr}.filters{position:static}.filter-options{max-height:180px}.section-grid{grid-template-columns:1fr}}
     @media(max-width:720px){.page{padding:16px}.topbar{flex-direction:column;padding:24px}.scope-badge{text-align:left}.tabs{width:100%;overflow:auto}.tab-btn{white-space:nowrap}.summary-grid,.region-grid,.insights-grid,.hotspot-grid,.method-grid,.modal-grid{grid-template-columns:1fr}.modal-field.wide{grid-column:auto}.bar-row{grid-template-columns:122px 1fr 34px}}
-    @media (min-width: 721px) and (max-width: 1150px) {
-  .dashboard-layout {
-    grid-template-columns: 300px minmax(0, 1fr);
-  }
-
-  .filters {
-    position: sticky;
-    top: 16px;
-  }
+    @media (min-width: 721px) and (max-width: 1150px) {.dashboard-layout {grid-template-columns: 300px minmax(0, 1fr);}
+    .filters {position: sticky;top: 16px;}
 }
   </style>
 </head>
@@ -134,7 +132,8 @@
         <div class="modal-field"><span class="modal-label">Type de candidature</span><p id="modal-category"></p></div><div class="modal-field"><span class="modal-label">Statut dans le corpus</span><p id="modal-status"></p></div>
         <div class="modal-field wide"><span class="modal-label">Concurrent(s) / configuration mentionnée</span><p id="modal-competitors"></p></div>
         <div class="modal-field wide"><span class="modal-label">Dynamique politique identifiée</span><p id="modal-dynamics"></p></div>
-        <div class="modal-field wide evidence"><span class="modal-label">Élément probant transmis</span><p id="modal-evidence"></p></div>
+        <div class="modal-field wide evidence"><span class="modal-label">Éléments probants et sources</span><div id="modal-evidence" class="evidence-list"></div>
+</div>
         <div class="modal-field"><span class="modal-label">Niveau de certitude</span><p id="modal-certainty"></p></div>
       </div>
     </div>
@@ -610,8 +609,49 @@
 
     function toggleModal(show) { document.getElementById('candidate-modal').classList.toggle('active',show); document.body.style.overflow=show?'hidden':''; }
     function closeModal(event) { if(event.target.id==='candidate-modal') toggleModal(false); }
-    function openModal(index) { const c=candidates[index]; const fields={'modal-name':c.name,'modal-subtitle':`${c.party} · ${c.department} · ${c.region}`,'modal-region':c.region,'modal-department':c.department,'modal-party':c.party,'modal-family':c.family,'modal-category':labels.categories[c.category],'modal-status':labels.statuses[c.status],'modal-competitors':c.competitors || 'Aucun concurrent explicitement renseigné dans le corpus.','modal-dynamics':c.dynamics,'modal-evidence':c.evidence || 'Aucun élément probant isolé dans le corpus.','modal-certainty':c.certainty}; Object.entries(fields).forEach(([id,value])=>document.getElementById(id).textContent=value); toggleModal(true); }
-    document.addEventListener('keydown', event=>{ if(event.key==='Escape') toggleModal(false); });
+    function openModal(index) { 
+    const c = candidates[index]; 
+  
+  const fields = {
+    'modal-name': c.name,
+    'modal-subtitle': `${c.party} · ${c.department} · ${c.region}`,
+    'modal-region': c.region,
+    'modal-department': c.department,
+    'modal-party': c.party,
+    'modal-family': c.family,
+    'modal-category': labels.categories[c.category],
+    'modal-status': labels.statuses[c.status],
+    'modal-competitors': c.competitors || 'Aucun concurrent explicitement renseigné dans le corpus.',
+    'modal-dynamics': c.dynamics,
+    'modal-certainty': c.certainty
+  }; 
+  
+  Object.entries(fields).forEach(([id,value]) => document.getElementById(id).textContent = value); 
+  
+  const evidenceContainer = document.getElementById('modal-evidence');
+  
+  // Bascule dynamique : Gère le nouveau format (liens multiples) ou sécurise l'ancien format (texte unique)
+  if (c.evidences && c.evidences.length > 0) {
+    evidenceContainer.innerHTML = c.evidences.map(ev => `
+      <div class="evidence-item">
+        <div class="evidence-quote">« ${esc(ev.quote)} »</div>
+        ${ev.url ? `<a href="${esc(ev.url)}" class="evidence-link" target="_blank" rel="noopener noreferrer">Consulter la source ↗</a>` : ''}
+      </div>
+    `).join('');
+  } else if (c.evidence) {
+    evidenceContainer.innerHTML = `
+      <div class="evidence-item">
+        <div class="evidence-quote">« ${esc(c.evidence)} »</div>
+      </div>`;
+  } else {
+    evidenceContainer.innerHTML = '<p style="margin:0;color:#64748b;font-size:0.94rem;">Aucun élément probant isolé dans le corpus.</p>';
+  }
+
+  toggleModal(true); 
+}
+
+// Maintien de l'écoute clavier pour la fermeture de la modale
+document.addEventListener('keydown', event => { if(event.key === 'Escape') toggleModal(false); });
 
     function renderMethod() {
       document.getElementById('normalization-list').innerHTML = [
