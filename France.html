@@ -686,6 +686,7 @@
     evidenceContainer.innerHTML = `
       <div class="evidence-item">
         <div class="evidence-quote">« ${esc(c.evidence)} »</div>
+        ${c.url ? `<a href="${esc(c.url)}" class="evidence-link" target="_blank" rel="noopener noreferrer">Consulter la source ↗</a>` : ''}
       </div>`;
   } else {
     evidenceContainer.innerHTML = '<p style="margin:0;color:#64748b;font-size:0.94rem;">Aucun élément probant isolé dans le corpus.</p>';
